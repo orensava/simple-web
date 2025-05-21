@@ -1,0 +1,25 @@
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: simple-web-scaledobject
+  namespace: {{ .Release.Namespace }}
+spec:
+  scaleTargetRef:
+    name: {{ include "simple-web.fullname" . }}
+  pollingInterval: 30
+  cooldownPeriod: 300
+  minReplicaCount: 1
+  maxReplicaCount: 5
+  triggers:
+    - type: cpu
+      metadata:
+        type: Utilization
+        value: "50"
+    - type: memory
+      metadata:
+        type: Utilization
+        value: "50"
+  scheduling:
+    timezone: Asia/Jerusalem
+    start: "08:00"
+    end: "00:00"
